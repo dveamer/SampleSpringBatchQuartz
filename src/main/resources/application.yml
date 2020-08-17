@@ -1,0 +1,51 @@
+spring:
+  batch :
+    job:
+      enabled : false
+  quartz:
+    scheduler-name: Sample-Quartz-Scheduler
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    wait-for-jobs-to-complete-on-shutdown: true
+    overwrite-existing-jobs: true
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+            instanceName: example
+            makeSchedulerThreadDaemon : true
+            interruptJobsOnShutdown  : true
+          jobStore:
+            clusterCheckinInterval: 20000
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            isClustered: true
+            misfireThreshold: 60000
+            tablePrefix: QRTZ_
+            useProperties: false
+          threadPool:
+            threadCount: 5
+            makeThreadsDaemons : true
+
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL #;TRACE_LEVEL_FIle=4
+    username: sa
+    password:
+    initialization-mode: always
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    com.dveamer.batch: debug
+
+# 초 분 시 일 월 요일 연도
+jobs:
+  EvaluateForeignCurrencyJob:
+    schedule: "3 * * * * ? *"
+  CleanForeignCurrencyJob:
+    schedule: "3 11 * * * ? *"
+
